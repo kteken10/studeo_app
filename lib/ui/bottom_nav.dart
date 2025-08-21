@@ -13,40 +13,31 @@ class CustomBottomNav extends StatefulWidget {
 class _CustomBottomNavState extends State<CustomBottomNav> {
   int _selectedIndex = 0;
 
-  // Liste des icônes outline (non sélectionnées)
-  final List<IconData> _iconsOutline = [
+  final List<IconData> _icons = [
     Iconsax.home,
     Iconsax.search_normal,
     Iconsax.message,
     Iconsax.user,
   ];
 
-  // Liste des icônes bold/remplies (sélectionnées)
-  final List<IconData> _iconsBold = [
-    Iconsax.home5,
-     Iconsax.search_normal2,
-    Iconsax.message5,
-    Iconsax.user5,
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // fond de l'écran
+      backgroundColor: Colors.white, 
       body: Center(
-        child: HomeScreen(), // ton écran principal
+        child: HomeScreen(), 
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: AppColors.ternary[900], // fond du nav
+            color: AppColors.ternary[900], 
             borderRadius: BorderRadius.circular(50),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(_iconsOutline.length, (index) {
+            children: List.generate(_icons.length, (index) {
               final bool isSelected = _selectedIndex == index;
               return GestureDetector(
                 onTap: () {
@@ -65,9 +56,9 @@ class _CustomBottomNavState extends State<CustomBottomNav> {
                     width: 26,
                     height: 26,
                     child: Icon(
-                      isSelected ? _iconsBold[index] : _iconsOutline[index],
+                      _icons[index],
                       color: isSelected ? Colors.black : Colors.white,
-                      size: 22, // taille réduite pour respirer dans la box
+                      size: 22,
                     ),
                   ),
                 ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/screens/home.dart';
 import 'package:studapart_mobile/ui/bottom_nav.dart';
 
 void main() {
@@ -15,8 +14,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        
-      
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
