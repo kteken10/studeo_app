@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:studapart_mobile/constants/colors.dart';
+import 'package:studapart_mobile/screens/favorite.dart';
 import 'package:studapart_mobile/screens/home.dart';
+import 'package:studapart_mobile/screens/profile.dart';
 import 'package:studapart_mobile/screens/search.dart';
 
 class CustomBottomNav extends StatefulWidget {
@@ -24,6 +26,8 @@ class _CustomBottomNavState extends State<CustomBottomNav> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const SearchScreen(),
+    const FavoritesScreen(),
+    const ProfileScreen(),
   ];
 
   @override
