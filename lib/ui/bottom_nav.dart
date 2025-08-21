@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:studapart_mobile/constants/colors.dart';
 import 'package:studapart_mobile/screens/home.dart';
+import 'package:studapart_mobile/screens/search.dart';
 
 class CustomBottomNav extends StatefulWidget {
   const CustomBottomNav({super.key});
@@ -16,17 +17,20 @@ class _CustomBottomNavState extends State<CustomBottomNav> {
   final List<IconData> _icons = [
     Iconsax.home,
     Iconsax.search_normal,
-    Iconsax.message,
+    Iconsax.heart, 
     Iconsax.user,
+  ];
+
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const SearchScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white, 
-      body: Center(
-        child: HomeScreen(), 
-      ),
+      body: _screens[_selectedIndex], 
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Container(
