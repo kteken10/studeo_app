@@ -1,0 +1,60 @@
+// lib/data/cities.dart
+
+/// Liste enrichie des grandes villes FR, BE, IT
+const List<String> cities = [
+  // 🇫🇷 France
+  "Aix-en-Provence, FR",
+  "Bordeaux, FR",
+  "Grenoble, FR",
+  "Lille, FR",
+  "Lyon, FR",
+  "Marseille, FR",
+  "Montpellier, FR",
+  "Nantes, FR",
+  "Nice, FR",
+  "Paris 1er (75001), FR",
+  "Paris 2e (75002), FR",
+  "Paris 3e (75003), FR",
+  "Paris 4e (75004), FR",
+  "Paris 5e (75005), FR",
+  "Paris 6e (75006), FR",
+  "Paris 7e (75007), FR",
+  "Paris 8e (75008), FR",
+  "Paris 9e (75009), FR",
+  "Paris 10e (75010), FR",
+  "Paris 11e (75011), FR",
+  "Paris 12e (75012), FR",
+  "Paris 13e (75013), FR",
+  "Paris 14e (75014), FR",
+  "Paris 15e (75015), FR",
+  "Paris 16e (75016), FR",
+  "Paris 17e (75017), FR",
+  "Paris 18e (75018), FR",
+  "Paris 19e (75019), FR",
+  "Paris 20e (75020), FR",
+  "Rennes, FR",
+  "Strasbourg, FR",
+  "Toulouse, FR",
+
+  // 🇧🇪 Belgique
+  "Anvers, BE",
+  "Bruges, BE",
+  "Bruxelles, BE",
+  "Charleroi, BE",
+  "Gand, BE",
+  "Liège, BE",
+  "Louvain, BE",
+  "Mons, BE",
+  "Namur, BE",
+
+  // 🇮🇹 Italie
+  "Bologne, IT",
+  "Florence, IT",
+  "Milan, IT",
+  "Naples, IT",
+  "Palerme, IT",
+  "Rome, IT",
+  "Turin, IT",
+  "Venise, IT",
+  "Vérone, IT"
+];

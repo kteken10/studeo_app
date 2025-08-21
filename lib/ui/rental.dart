@@ -17,8 +17,8 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
   OverlayEntry? _overlayEntry;
   bool menuVisible = false;
 
-  int messageCount = 3;   // 🔔 Exemple : 3 messages non lus
-  int favoriteCount = 7;  // ❤️ Exemple : 7 favoris
+  int messageCount = 3;        // 🔔 Messages non lus
+  int notificationCount = 7;   // 🔔 Notifications
 
   late AnimationController _controller;
   late Animation<double> _shakeAnimation;
@@ -39,7 +39,7 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
       TweenSequenceItem(tween: Tween(begin: 0.15, end: 0), weight: 1),
     ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    // ⏱ Animation toutes les 3 secondes
+    // ⏱ Animation de secouement toutes les 3 secondes
     _shakeTimer = Timer.periodic(const Duration(seconds: 3), (_) {
       if (mounted && messageCount > 0) {
         _controller.forward(from: 0);
@@ -102,7 +102,7 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
     int badgeCount = 0,
     VoidCallback? onTap,
     Key? key,
-    bool shake = false, // 🔥 option secouement
+    bool shake = false, // option secouement
   }) {
     Widget iconWidget = Center(child: Icon(icon, size: 24, color: color));
 
@@ -185,7 +185,7 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // 🔔 Message avec secouement périodique
+        // 🔔 Messages avec secouement périodique
         buildCircleIcon(
           icon: Iconsax.sms,
           color: AppColors.quadrary[900]!,
@@ -198,14 +198,15 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
           },
         ),
 
-        // ❤️ Favoris
+        // 🔔 Notifications (ancien cœur)
         buildCircleIcon(
-          icon: Iconsax.heart,
+          icon: Iconsax.notification,
           color: AppColors.quadrary[900]!,
-          badgeCount: favoriteCount,
+          badgeCount: notificationCount,
           onTap: () {
             setState(() {
-              favoriteCount = (favoriteCount > 0) ? favoriteCount - 1 : 0;
+              notificationCount =
+                  (notificationCount > 0) ? notificationCount - 1 : 0;
             });
           },
         ),
@@ -213,7 +214,7 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
         // 🍔 Menu
         buildCircleIcon(
           key: _menuKey,
-          icon: Iconsax.menu,
+          icon: Iconsax.more,
           color: AppColors.quadrary[900]!,
           onTap: toggleMenu,
         ),
