@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:studapart_mobile/constants/colors.dart';
@@ -11,13 +12,47 @@ class Rental extends StatefulWidget {
   State<Rental> createState() => _RentalState();
 }
 
-class _RentalState extends State<Rental> {
+class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
   final GlobalKey _menuKey = GlobalKey();
   OverlayEntry? _overlayEntry;
   bool menuVisible = false;
 
   int messageCount = 3;   // 🔔 Exemple : 3 messages non lus
   int favoriteCount = 7;  // ❤️ Exemple : 7 favoris
+
+  late AnimationController _controller;
+  late Animation<double> _shakeAnimation;
+  Timer? _shakeTimer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    _shakeAnimation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0, end: -0.15), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: -0.15, end: 0.15), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 0.15, end: 0), weight: 1),
+    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    // ⏱ Animation toutes les 3 secondes
+    _shakeTimer = Timer.periodic(const Duration(seconds: 3), (_) {
+      if (mounted && messageCount > 0) {
+        _controller.forward(from: 0);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _shakeTimer?.cancel();
+    _controller.dispose();
+    super.dispose();
+  }
 
   void toggleMenu() {
     if (menuVisible) {
@@ -48,15 +83,11 @@ class _RentalState extends State<Rental> {
             children: [
               ListTile(
                 title: const Text("Ouvrir le dossier"),
-                onTap: () {
-                  toggleMenu();
-                },
+                onTap: toggleMenu,
               ),
               ListTile(
                 title: const Text("Modifier"),
-                onTap: () {
-                  toggleMenu();
-                },
+                onTap: toggleMenu,
               ),
             ],
           ),
@@ -71,7 +102,23 @@ class _RentalState extends State<Rental> {
     int badgeCount = 0,
     VoidCallback? onTap,
     Key? key,
+    bool shake = false, // 🔥 option secouement
   }) {
+    Widget iconWidget = Center(child: Icon(icon, size: 24, color: color));
+
+    if (shake) {
+      iconWidget = AnimatedBuilder(
+        animation: _shakeAnimation,
+        builder: (context, child) {
+          return Transform.rotate(
+            angle: _shakeAnimation.value,
+            child: child,
+          );
+        },
+        child: iconWidget,
+      );
+    }
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -100,28 +147,23 @@ class _RentalState extends State<Rental> {
               splashColor: AppColors.primary[900]!.withOpacity(0.2),
               highlightColor: Colors.grey.withOpacity(0.1),
               onTap: onTap,
-              child: Center(
-                child: Icon(icon, size: 24, color: color),
-              ),
+              child: iconWidget,
             ),
           ),
         ),
 
-        // 🔴 Badge (seulement si badgeCount > 0)
+        // 🔴 Badge
         if (badgeCount > 0)
           Positioned(
             right: 2,
             top: 2,
             child: Container(
               padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.red,
                 shape: BoxShape.circle,
               ),
-              constraints: const BoxConstraints(
-                minWidth: 18,
-                minHeight: 18,
-              ),
+              constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
               child: Center(
                 child: Text(
                   badgeCount.toString(),
@@ -143,19 +185,20 @@ class _RentalState extends State<Rental> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Message avec badge
+        // 🔔 Message avec secouement périodique
         buildCircleIcon(
           icon: Iconsax.sms,
           color: AppColors.quadrary[900]!,
           badgeCount: messageCount,
+          shake: true,
           onTap: () {
             setState(() {
-              messageCount = 0; // Exemple : remettre à zéro après lecture
+              messageCount = 0;
             });
           },
         ),
 
-        // Favoris avec badge
+        // ❤️ Favoris
         buildCircleIcon(
           icon: Iconsax.heart,
           color: AppColors.quadrary[900]!,
@@ -167,7 +210,7 @@ class _RentalState extends State<Rental> {
           },
         ),
 
-        // Menu Burger (sans badge)
+        // 🍔 Menu
         buildCircleIcon(
           key: _menuKey,
           icon: Iconsax.menu,
