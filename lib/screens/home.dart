@@ -4,16 +4,16 @@ import 'package:studapart_mobile/data/locations.dart';
 import 'package:studapart_mobile/ui/city_card.dart';
 import 'package:studapart_mobile/ui/custom_app_bar.dart';
 import 'package:studapart_mobile/ui/daily_promo_card.dart';
-
 import 'package:studapart_mobile/ui/location_selector.dart';
-import 'package:studapart_mobile/ui/rental.dart';
+
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
@@ -31,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen>
         });
       });
   }
-
   @override
   void dispose() {
     _scrollController.dispose();

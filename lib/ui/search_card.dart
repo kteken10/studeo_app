@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:studapart_mobile/constants/colors.dart';
 import 'package:studapart_mobile/data/citie.dart';
 
+// Modals
+import 'package:studapart_mobile/ui/type_logement_modal.dart';
+import 'package:studapart_mobile/ui/budget_modal.dart';
+import 'package:studapart_mobile/ui/rooms_modal.dart';
+import 'package:studapart_mobile/ui/date_modal.dart';
+
 class SearchCard extends StatefulWidget {
   final TextEditingController? controller;
   final String hintText;
@@ -20,16 +26,16 @@ class _SearchCardState extends State<SearchCard> {
   bool _isSearching = false;
   late final TextEditingController _searchController;
 
-  List<String> _selectedCities = [];
+  final List<String> _selectedCities = [];
   List<String> _filteredCities = [];
 
-  // Ajouts pour les filtres
+  // Filtres
   DateTime? _selectedDate;
-  String? _selectedType;
+  List<String> _selectedTypes = [];
   RangeValues _priceRange = const RangeValues(300, 1200);
   int _rooms = 1;
 
-  final List<String> _types = [
+  final List<String> _types = const [
     "Logement entier",
     "Colocation",
     "Coliving",
@@ -46,9 +52,8 @@ class _SearchCardState extends State<SearchCard> {
     _searchController.addListener(() {
       final query = _searchController.text.toLowerCase();
       setState(() {
-        _filteredCities = cities
-            .where((city) => city.toLowerCase().contains(query))
-            .toList();
+        _filteredCities =
+            cities.where((city) => city.toLowerCase().contains(query)).toList();
       });
     });
   }
@@ -61,6 +66,7 @@ class _SearchCardState extends State<SearchCard> {
     super.dispose();
   }
 
+  // ---- Gestion recherche ----
   void _toggleSearch() {
     setState(() {
       _isSearching = !_isSearching;
@@ -72,54 +78,30 @@ class _SearchCardState extends State<SearchCard> {
   }
 
   void _selectCity(String city) {
-    setState(() {
-      if (!_selectedCities.contains(city)) {
-        _selectedCities.add(city);
-      }
-      _searchController.clear();
-      _filteredCities = List.from(cities);
-    });
+    if (!_selectedCities.contains(city)) {
+      setState(() => _selectedCities.add(city));
+    }
+    _searchController.clear();
+    _filteredCities = List.from(cities);
   }
 
   void _removeCity(String city) {
-    setState(() {
-      _selectedCities.remove(city);
-    });
+    setState(() => _selectedCities.remove(city));
   }
 
   // ---- Filtres ----
   Future<void> _pickDate() async {
-    final now = DateTime.now();
-    final picked = await showDatePicker(
-      context: context,
-      firstDate: now,
-      lastDate: DateTime(now.year + 2),
-      initialDate: now,
-    );
-    if (picked != null) {
-      setState(() {
-        _selectedDate = picked;
-      });
-    }
+    final picked = await showDateModal(context);
+    if (picked != null) setState(() => _selectedDate = picked);
   }
 
   void _pickType() {
     showModalBottomSheet(
       context: context,
-      builder: (_) => ListView(
-        padding: const EdgeInsets.all(16),
-        children: _types.map((t) {
-          return ListTile(
-            leading: const Icon(Icons.home_work_outlined),
-            title: Text(t),
-            onTap: () {
-              setState(() {
-                _selectedType = t;
-              });
-              Navigator.pop(context);
-            },
-          );
-        }).toList(),
+      builder: (_) => TypeLogementModal(
+        types: _types,
+      
+        onSelected: (types) => setState(() => _selectedTypes = types),
       ),
     );
   }
@@ -127,32 +109,9 @@ class _SearchCardState extends State<SearchCard> {
   void _pickPrice() {
     showModalBottomSheet(
       context: context,
-      builder: (_) => StatefulBuilder(
-        builder: (context, setModalState) {
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("Prix: ${_priceRange.start.toInt()}€ - ${_priceRange.end.toInt()}€"),
-                RangeSlider(
-                  min: 100,
-                  max: 3000,
-                  divisions: 30,
-                  values: _priceRange,
-                  onChanged: (values) {
-                    setModalState(() => _priceRange = values);
-                    setState(() {});
-                  },
-                ),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("Valider"),
-                )
-              ],
-            ),
-          );
-        },
+      builder: (_) => BudgetModal(
+        initialRange: _priceRange,
+        onChanged: (range) => setState(() => _priceRange = range),
       ),
     );
   }
@@ -160,166 +119,109 @@ class _SearchCardState extends State<SearchCard> {
   void _pickRooms() {
     showModalBottomSheet(
       context: context,
-      builder: (_) => StatefulBuilder(
-        builder: (context, setModalState) {
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.remove_circle_outline),
-                  onPressed: () {
-                    if (_rooms > 1) {
-                      setModalState(() => _rooms--);
-                      setState(() {});
-                    }
-                  },
-                ),
-                Text("$_rooms pièce(s)", style: const TextStyle(fontSize: 18)),
-                IconButton(
-                  icon: const Icon(Icons.add_circle_outline),
-                  onPressed: () {
-                    setModalState(() => _rooms++);
-                    setState(() {});
-                  },
-                ),
-              ],
-            ),
-          );
-        },
+      builder: (_) => RoomsModal(
+        initialRooms: _rooms,
+        onChanged: (rooms) => setState(() => _rooms = rooms),
       ),
     );
   }
 
+  // ---- UI ----
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // 🔍 Barre de recherche ville
-        Container(
-          height: 60,
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
-            border: Border.all(color: Colors.grey.shade200),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary[900]!.withOpacity(0.1),
-                blurRadius: 1,
-                offset: const Offset(0, 1),
-              ),
-            ],
-          ),
-          alignment: Alignment.centerLeft,
-          child: Row(
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                width: _isSearching
-                    ? MediaQuery.of(context).size.width - 250
-                    : 0,
-                height: 25,
-                curve: Curves.easeInOut,
-                child: _isSearching
-                    ? TextField(
-                        controller: _searchController,
-                        autofocus: true,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade200),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                            borderSide:
-                                const BorderSide(color: Colors.white),
-                          ),
-                          hintText: widget.hintText,
-                          fillColor: Colors.white,
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 8),
-                        ),
-                      )
-                    : null,
-              ),
-              if (_isSearching) const SizedBox(width: 8),
-              CircleAvatar(
-                backgroundColor: AppColors.primary[900],
-                radius: _isSearching ? 8 : 16,
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  icon: Icon(
-                    _isSearching ? Icons.close : Icons.search,
-                    color: _isSearching
-                        ? AppColors.warning[900]
-                        : AppColors.white,
-                    size: _isSearching ? 12 : 20,
-                  ),
-                  onPressed: _toggleSearch,
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // 📌 Suggestions villes
+        _buildSearchBar(),
         if (_isSearching && _searchController.text.isNotEmpty)
           _buildCitySuggestions(),
-
-        // 🏷️ Villes sélectionnées
         if (_selectedCities.isNotEmpty) _buildSelectedCities(),
-
         const SizedBox(height: 12),
 
-        // 🎯 Icônes filtres
-       Row(
-  mainAxisAlignment: MainAxisAlignment.start, // ← icônes alignées à gauche
-  children: [
-   
-    _filterIcon(Icons.calendar_today, "Date", _pickDate),
-    const SizedBox(width: 32), // espacement entre les icônes
-    _filterIcon(Icons.apartment, "Type", _pickType),
-    const SizedBox(width: 32),
-    _filterIcon(Icons.euro, "Prix", _pickPrice),
-    const SizedBox(width: 32),
-    _filterIcon(Icons.meeting_room, "Pièces", _pickRooms),
-  ],
-),
+        // Icônes filtres
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _filterIcon(Icons.calendar_today, "Date", _pickDate),
+            _filterIcon(Icons.apartment, "Type de Logement", _pickType),
+            _filterIcon(Icons.euro, "Budget", _pickPrice),
+            _filterIcon(Icons.meeting_room, "Nb pièce", _pickRooms),
+          ],
+        ),
 
-       // Résumé des filtres appliqués
-if (_selectedDate != null || _selectedType != null || _rooms > 1)
-  Padding(
-    padding: const EdgeInsets.only(top: 12, left: 0), // ← ajout padding gauche
-    child: Align(
-      alignment: Alignment.centerLeft, // ← garantit l'alignement à gauche
-      child: Wrap(
-        spacing: 8,
-        children: [
-          if (_selectedDate != null)
-            Chip(
-              label: Text("Dès le ${_selectedDate!.day}/${_selectedDate!.month}"),
-              backgroundColor: AppColors.white,
-            ),
-          if (_selectedType != null) Chip(label: Text(_selectedType!)),
-          Chip(label: Text("${_priceRange.start.toInt()}€-${_priceRange.end.toInt()}€"),backgroundColor: AppColors.white,),
-          Chip(label: Text("$_rooms pièce(s)"),backgroundColor: AppColors.white,),
+        // Résumé des filtres
+        if (_hasFilters) _buildFiltersSummary(),
+      ],
+    );
+  }
+
+  // ---- Widgets UI ----
+  Widget _buildSearchBar() {
+    return Container(
+      height: 60,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary[900]!.withOpacity(0.1),
+            blurRadius: 1,
+            offset: const Offset(0, 1),
+          ),
         ],
       ),
-    ),
-  ),
-
-      ],
+      alignment: Alignment.centerLeft,
+      child: Row(
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            width: _isSearching
+                ? MediaQuery.of(context).size.width - 250
+                : 0,
+            height: 25,
+            curve: Curves.easeInOut,
+            child: _isSearching
+                ? TextField(
+                    controller: _searchController,
+                    autofocus: true,
+                    style: const TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      hintText: widget.hintText,
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 8),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: const BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(color: Colors.grey.shade200),
+                      ),
+                    ),
+                  )
+                : null,
+          ),
+          if (_isSearching) const SizedBox(width: 8),
+          CircleAvatar(
+            backgroundColor: AppColors.primary[900],
+            radius: _isSearching ? 8 : 16,
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              icon: Icon(
+                _isSearching ? Icons.close : Icons.search,
+                color: _isSearching ? AppColors.warning[900] : AppColors.white,
+                size: _isSearching ? 12 : 20,
+              ),
+              onPressed: _toggleSearch,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -349,11 +251,11 @@ if (_selectedDate != null || _selectedType != null || _rooms > 1)
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black12,
               blurRadius: 4,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
@@ -385,36 +287,71 @@ if (_selectedDate != null || _selectedType != null || _rooms > 1)
     return Container(
       margin: const EdgeInsets.only(top: 8),
       height: 40,
-      child: SingleChildScrollView(
+      child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: _selectedCities.map((city) {
-            return Container(
-              margin: EdgeInsets.only(
-                right: 8,
-                left: _selectedCities.first == city ? 0 : 4,
+        itemCount: _selectedCities.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        itemBuilder: (context, index) {
+          final city = _selectedCities[index];
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.primary[900]!.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              children: [
+                Text(city, style: const TextStyle(color: Colors.black)),
+                const SizedBox(width: 4),
+                GestureDetector(
+                  onTap: () => _removeCity(city),
+                  child: const Icon(Icons.close, size: 16),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildFiltersSummary() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Wrap(
+          spacing: 8,
+          children: [
+            if (_selectedDate != null)
+              Chip(
+                label: Text(
+                  "Dès le ${_selectedDate!.day}/${_selectedDate!.month}",
+                ),
+                backgroundColor: AppColors.white,
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: AppColors.primary[900]!.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(20),
+            if (_selectedTypes.isNotEmpty)
+              ..._selectedTypes.map((type) => Chip(label: Text(type))),
+            Chip(
+              label: Text(
+                "${_priceRange.start.toInt()}€-${_priceRange.end.toInt()}€",
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(city, style: const TextStyle(color: Colors.black)),
-                  const SizedBox(width: 4),
-                  GestureDetector(
-                    onTap: () => _removeCity(city),
-                    child: const Icon(Icons.close, size: 16),
-                  )
-                ],
-              ),
-            );
-          }).toList(),
+              backgroundColor: AppColors.white,
+            ),
+            Chip(
+              label: Text("$_rooms pièce(s)"),
+              backgroundColor: AppColors.white,
+            ),
+          ],
         ),
       ),
     );
   }
+
+  bool get _hasFilters =>
+      _selectedDate != null ||
+      _selectedTypes.isNotEmpty ||
+      _priceRange.start != 300 ||
+      _priceRange.end != 1200 ||
+      _rooms != 1;
 }
