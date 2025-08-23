@@ -41,7 +41,7 @@ class _TypeLogementModalState extends State<TypeLogementModal> {
             ),
             const SizedBox(height: 12),
 
-            // ✅ Correction ici : Flexible au lieu de Expanded
+            // ✅ Liste déroulante avec cases à cocher
             Flexible(
               fit: FlexFit.loose,
               child: ListView(
@@ -52,7 +52,10 @@ class _TypeLogementModalState extends State<TypeLogementModal> {
                     onChanged: (checked) {
                       setState(() {
                         if (checked == true) {
-                          _selected.add(t);
+                          // ✅ Empêcher les doublons
+                          if (!_selected.contains(t)) {
+                            _selected.add(t);
+                          }
                         } else {
                           _selected.remove(t);
                         }
@@ -65,6 +68,7 @@ class _TypeLogementModalState extends State<TypeLogementModal> {
                 }).toList(),
               ),
             ),
+
             const SizedBox(height: 16),
 
             // ✅ Bouton valider

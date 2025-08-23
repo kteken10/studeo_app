@@ -96,15 +96,15 @@ class _SearchCardState extends State<SearchCard> {
   }
 
   void _pickType() {
-    showModalBottomSheet(
-      context: context,
-      builder: (_) => TypeLogementModal(
-        types: _types,
-      
-        onSelected: (types) => setState(() => _selectedTypes = types),
-      ),
-    );
-  }
+  showModalBottomSheet(
+    context: context,
+    builder: (_) => TypeLogementModal(
+      types: _types,
+      initialSelected: _selectedTypes, // <-- AJOUTE CETTE LIGNE
+      onSelected: (types) => setState(() => _selectedTypes = types),
+    ),
+  );
+}
 
   void _pickPrice() {
     showModalBottomSheet(
