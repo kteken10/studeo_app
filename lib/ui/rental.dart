@@ -175,6 +175,7 @@ class _RentalState extends State<Rental> with TickerProviderStateMixin {
             border: Border.all(color: Colors.grey.shade200),
             boxShadow: [
               BoxShadow(
+                // ignore: deprecated_member_use
                 color: AppColors.primary[900]!.withOpacity(0.1),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
@@ -186,7 +187,9 @@ class _RentalState extends State<Rental> with TickerProviderStateMixin {
             shape: const CircleBorder(),
             child: InkWell(
               customBorder: const CircleBorder(),
+              // ignore: deprecated_member_use
               splashColor: AppColors.primary[900]!.withOpacity(0.2),
+              // ignore: deprecated_member_use
               highlightColor: Colors.grey.withOpacity(0.1),
               onTap: onTap,
               child: iconWidget,

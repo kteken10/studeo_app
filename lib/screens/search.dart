@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/ui/RoomCard.dart';
+import 'package:studapart_mobile/ui/room_card.dart';
 import 'package:studapart_mobile/ui/custom_app_bar.dart';
 import 'package:studapart_mobile/ui/search_card.dart';
 

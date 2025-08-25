@@ -2,9 +2,12 @@ final List<Map<String, dynamic>> roomsData = [
   {
     'title': 'Studio Paris 10e – Canal Saint-Martin',
     'type': 'Studio étudiant',
-    'price': '850€',
+    'originalPrice': '950€',
+    'currentPrice': '850€',
     'features': ['20 m²', 'Meublé', 'Proche métro'],
     'availability': 'Disponible',
+    'isFavorite': false,
+    'isOnPromotion': true,
     'images': [
       'assets/CanvasPuteau1.jpeg',
       'assets/CanvasPuteau2.jpg',
@@ -15,11 +18,43 @@ final List<Map<String, dynamic>> roomsData = [
     ],
   },
   {
+    'title': 'Appartement T2 – Sergic Nanterre',
+    'type': 'Appartement T2',
+    'originalPrice': '1250€',
+    'currentPrice': '1150€',
+    'features': ['40 m²', 'Balcon', 'Proche université'],
+    'availability': 'Disponible à partir du 30 août 2025',
+    'isFavorite': false,
+    'isOnPromotion': true,
+    'images': [
+      'assets/Nantere1.jpeg'
+      'assets/Nantere2.jpeg',
+      'assets/Nantere3.jpeg',
+    ],
+  },
+  {
+    'title': 'Appartement T1 – Nanterre Centre',
+    'type': 'Appartement T1',
+    'originalPrice': '750€',
+    'currentPrice': '650€',
+    'features': ['25 m²', 'Meublé', 'Proche commerces'],
+    'availability': 'Disponible',
+    'isFavorite': false,
+    'isOnPromotion': true,
+    'images': [
+      'assets/Nanterre1.jpeg',
+      'assets/Nanterre2.jpeg',
+      'assets/Nanterre3.jpeg',
+    ],
+  },
+  {
     'title': 'Colocation Paris 15e – Colliving étudiant',
     'type': 'Colocation',
     'price': '720€',
     'features': ['12 m²', 'Cuisine partagée', 'Salon commun'],
     'availability': 'Disponible',
+    'isFavorite': true,
+    'isOnPromotion': false,
     'images': [
       'assets/Collving1.jpeg',
       'assets/Collving2.jpeg',
@@ -32,6 +67,8 @@ final List<Map<String, dynamic>> roomsData = [
     'price': '550€',
     'features': ['14 m²', 'Salle de bain partagée', 'Internet inclus'],
     'availability': 'Disponible',
+    'isFavorite': false,
+    'isOnPromotion': false,
     'images': [
       'assets/Coloc1.jpeg',
       'assets/Coloc2.jpeg',
@@ -40,9 +77,12 @@ final List<Map<String, dynamic>> roomsData = [
   {
     'title': 'Appartement T2 – Ecla Courbevoie',
     'type': 'Appartement T2',
-    'price': '1250€',
+    'originalPrice': '1350€',
+    'currentPrice': '1250€',
     'features': ['35 m²', 'Meublé', 'Terrasse'],
     'availability': 'Disponible',
+    'isFavorite': false,
+    'isOnPromotion': true,
     'images': [
       'assets/Ecla1.jpg',
       'assets/Ecla1.png',
@@ -58,6 +98,8 @@ final List<Map<String, dynamic>> roomsData = [
     'price': '1650€',
     'features': ['50 m²', '2 salles de bain', 'Garage'],
     'availability': 'Disponible',
+    'isFavorite': false,
+    'isOnPromotion': false,
     'images': [
       'assets/EclaNolsy1.jpg',
       'assets/EclaNolsy2.jpeg',
@@ -72,6 +114,8 @@ final List<Map<String, dynamic>> roomsData = [
     'price': '980€',
     'features': ['28 m²', 'Cuisine équipée', 'Balcon'],
     'availability': 'Disponible',
+    'isFavorite': false,
+    'isOnPromotion': false,
     'images': [
       'assets/ExcluFlat1.jpg',
       'assets/ExcluFlat2.jpg',
@@ -83,24 +127,11 @@ final List<Map<String, dynamic>> roomsData = [
     'price': '540€',
     'features': ['15 m²', 'Cuisine partagée', 'Accès sécurisé'],
     'availability': 'Disponible',
+    'isFavorite': true,
+    'isOnPromotion': false,
     'images': [
       'assets/Montere1.png',
       'assets/Montere2.jpg',
-    ],
-  },
-  {
-    'title': 'Appartement T2 – Sergic Nanterre',
-    'type': 'Appartement T2',
-    'price': '1150€',
-    'features': ['40 m²', 'Balcon', 'Proche université'],
-    'availability': 'Disponible à partir du 30 août 2025',
-    'images': [
-      'assets/SergicNantere1.jpg',
-      'assets/SergicNantere2.jpg',
-      'assets/SergicNantere3.jpg',
-      'assets/SergicNantere4.jpg',
-      'assets/SergicNantere5.jpg',
-      'assets/SergicNantere6.jpg',
     ],
   },
 ];
