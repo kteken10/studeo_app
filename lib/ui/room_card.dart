@@ -32,14 +32,13 @@ class RoomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isAvailable =
-        availability.toLowerCase().contains('disponible') &&
-            !availability.toLowerCase().contains('à partir');
+    final bool isAvailable = availability.toLowerCase().contains('disponible') &&
+        !availability.toLowerCase().contains('à partir');
     final Color availabilityColor = isAvailable ? Colors.green : Colors.red;
 
-    // Affichage prix avec fallback automatique
+    // Prix affiché selon si promo ou non
     final String displayedPrice = isOnPromotion
-        ? (currentPrice ?? price ?? "Prix indisponible")
+        ? (currentPrice ?? "Prix indisponible")
         : (price ?? "Prix indisponible");
 
     return GestureDetector(
@@ -50,12 +49,15 @@ class RoomCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: Colors.grey.shade300, width: 1),
+          side: BorderSide(
+            color: Colors.grey.shade300,
+            width: 1,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Images swipe + favoris
+            // Images avec swipe et bouton favoris
             Stack(
               children: [
                 ClipRRect(
@@ -66,11 +68,13 @@ class RoomCard extends StatelessWidget {
                     width: double.infinity,
                     child: PageView.builder(
                       itemCount: imageUrls.length,
-                      itemBuilder: (context, index) => Image.asset(
-                        imageUrls[index],
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ),
+                      itemBuilder: (context, index) {
+                        return Image.asset(
+                          imageUrls[index],
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -94,75 +98,104 @@ class RoomCard extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(type,
-                            style: const TextStyle(
-                                fontSize: 12, color: AppColors.black)),
+                        child: Text(
+                          type,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppColors.black,
+                          ),
+                        ),
                       ),
-                      Text('à partir de',
-                          style: TextStyle(
-                              fontSize: 12, color: AppColors.primary[900])),
+                      Text(
+                        'à partir de',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.primary[900],
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 4),
 
-                  // Titre + Prix + Badge promo
+                  // Titre + Prix + Promotion
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: Text(title,
-                            style: const TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          if ( isOnPromotion)
+                          // Badge promo
+                          if (isOnPromotion)
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 2, horizontal: 8),
+                                vertical: 2,
+                                horizontal: 8,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.blue,
                                 borderRadius: BorderRadius.circular(50),
                               ),
-                              child: const Text('Promotion en cours',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold)),
+                              child: const Text(
+                                'Promotion en cours',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
+
+                          // Prix barré si promo
                           if (isOnPromotion && originalPrice != null) ...[
                             const SizedBox(height: 4),
-                            Text(originalPrice!,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white70,
-                                  decoration: TextDecoration.lineThrough,
-                                )),
+                            Text(
+                              originalPrice!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                            ),
                           ],
+
                           const SizedBox(height: 4),
+
+                          // Prix affiché
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 4, horizontal: 8),
                             decoration: BoxDecoration(
+                              color: AppColors.primary[900],
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: Text(
+                              displayedPrice,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '/ mois',
+                            style: TextStyle(
+                              fontSize: 12,
                               color: isOnPromotion
                                   ? Colors.blue
                                   : AppColors.primary[900],
-                              borderRadius: BorderRadius.circular(50),
                             ),
-                            child: Text(displayedPrice,
-                                style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white)),
                           ),
-                          Text('/ mois',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: isOnPromotion
-                                      ? Colors.blue
-                                      : AppColors.primary[900])),
                         ],
                       ),
                     ],
@@ -170,9 +203,13 @@ class RoomCard extends StatelessWidget {
                   const SizedBox(height: 8),
 
                   // Features
-                  Text(features.join(' - '),
-                      style: TextStyle(
-                          fontSize: 12, color: AppColors.primary[800])),
+                  Text(
+                    features.join(' - '),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.primary[800],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -190,11 +227,14 @@ class RoomCard extends StatelessWidget {
                 children: [
                   PulsatingCircle(color: availabilityColor),
                   const SizedBox(width: 6),
-                  Text(availability,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black)),
+                  Text(
+                    availability,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.black,
+                    ),
+                  ),
                 ],
               ),
             ),
