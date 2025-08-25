@@ -284,8 +284,8 @@ class _SearchCardState extends State<SearchCard> {
   }
 
   Widget _buildSelectedCities() {
-    return Container(
-      margin: const EdgeInsets.only(top: 8),
+    return SizedBox(
+      // margin: const EdgeInsets.only(top: 8),
       height: 40,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,

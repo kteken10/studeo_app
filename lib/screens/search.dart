@@ -24,7 +24,7 @@ class SearchScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SearchCard(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
                 itemCount: roomsData.length,

@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:studapart_mobile/constants/colors.dart';
 import 'package:studapart_mobile/screens/notification.dart';
-
 
 class Rental extends StatefulWidget {
   final bool isDossierComplet;
@@ -14,45 +14,85 @@ class Rental extends StatefulWidget {
   State<Rental> createState() => _RentalState();
 }
 
-class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
+class _RentalState extends State<Rental> with TickerProviderStateMixin {
   final GlobalKey _menuKey = GlobalKey();
   OverlayEntry? _overlayEntry;
   bool menuVisible = false;
 
-  int messageCount = 3;        // 🔔 Messages non lus
-  int notificationCount = 7;   // 🔔 Notifications
+  int messageCount = 3;
+  int notificationCount = 7;
 
-  late AnimationController _controller;
-  late Animation<double> _shakeAnimation;
-  Timer? _shakeTimer;
+  late AnimationController _messageController;
+  late Animation<double> _messageShake;
+
+  late AnimationController _notificationController;
+  late Animation<double> _notificationShake;
+
+  final Random _random = Random();
+  Timer? _messageTimer;
+  Timer? _notificationTimer;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
+    // Animation messages
+    _messageController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
 
-    _shakeAnimation = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 0, end: -0.15), weight: 1),
-      TweenSequenceItem(tween: Tween(begin: -0.15, end: 0.15), weight: 2),
-      TweenSequenceItem(tween: Tween(begin: 0.15, end: 0), weight: 1),
-    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _messageShake = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0, end: -0.3), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: -0.3, end: 0.3), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 0.3, end: 0), weight: 1),
+    ]).animate(CurvedAnimation(parent: _messageController, curve: Curves.easeInOut));
 
-    // ⏱ Animation de secouement toutes les 3 secondes
-    _shakeTimer = Timer.periodic(const Duration(seconds: 3), (_) {
+    // Animation notifications
+    _notificationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    _notificationShake = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0, end: -0.3), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: -0.3, end: 0.3), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 0.3, end: 0), weight: 1),
+    ]).animate(CurvedAnimation(parent: _notificationController, curve: Curves.easeInOut));
+
+    // Lancer les secouements aléatoires
+    _scheduleNextMessageShake();
+    _scheduleNextNotificationShake();
+  }
+
+  void _scheduleNextMessageShake() {
+    if (!mounted) return;
+    final duration = Duration(seconds: 2 + _random.nextInt(3)); // 2 à 4 sec
+    _messageTimer = Timer(duration, () {
       if (mounted && messageCount > 0) {
-        _controller.forward(from: 0);
+        _messageController.forward(from: 0);
       }
+      _scheduleNextMessageShake(); // replanifier
+    });
+  }
+
+  void _scheduleNextNotificationShake() {
+    if (!mounted) return;
+    final duration = Duration(seconds: 3 + _random.nextInt(4)); // 3 à 6 sec
+    _notificationTimer = Timer(duration, () {
+      if (mounted && notificationCount > 0) {
+        _notificationController.forward(from: 0);
+      }
+      _scheduleNextNotificationShake(); // replanifier
     });
   }
 
   @override
   void dispose() {
-    _shakeTimer?.cancel();
-    _controller.dispose();
+    _messageTimer?.cancel();
+    _notificationTimer?.cancel();
+    _messageController.dispose();
+    _notificationController.dispose();
     super.dispose();
   }
 
@@ -104,16 +144,16 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
     int badgeCount = 0,
     VoidCallback? onTap,
     Key? key,
-    bool shake = false,
+    Animation<double>? shakeAnimation,
   }) {
     Widget iconWidget = Center(child: Icon(icon, size: 24, color: color));
 
-    if (shake) {
+    if (shakeAnimation != null) {
       iconWidget = AnimatedBuilder(
-        animation: _shakeAnimation,
+        animation: shakeAnimation,
         builder: (context, child) {
           return Transform.rotate(
-            angle: _shakeAnimation.value,
+            angle: shakeAnimation.value,
             child: child,
           );
         },
@@ -153,7 +193,6 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
             ),
           ),
         ),
-
         if (badgeCount > 0)
           Positioned(
             right: 2,
@@ -186,39 +225,33 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // 🔔 Messages avec secouement périodique
         buildCircleIcon(
           icon: Iconsax.sms,
           color: AppColors.quadrary[900]!,
           badgeCount: messageCount,
-          shake: true,
+          shakeAnimation: _messageShake,
           onTap: () {
             setState(() {
               messageCount = 0;
             });
           },
         ),
-
-        // 🔔 Notifications
         buildCircleIcon(
           icon: Iconsax.notification,
           color: AppColors.quadrary[900]!,
           badgeCount: notificationCount,
+          shakeAnimation: _notificationShake,
           onTap: () {
             setState(() {
               notificationCount =
                   (notificationCount > 0) ? notificationCount - 1 : 0;
             });
-
-            // Navigation vers l'écran de notifications
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const NotificationScreen()),
             );
           },
         ),
-
-        // 🍔 Menu
         buildCircleIcon(
           key: _menuKey,
           icon: Iconsax.more,

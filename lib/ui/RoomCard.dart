@@ -138,7 +138,8 @@ class RoomCard extends StatelessWidget {
                   // Features
                   Text(
                     features.join(' - '),
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(fontSize: 12, color: AppColors.primary[800]
+                  ),
                   ),
                 ],
               ),
@@ -163,7 +164,7 @@ Container(
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.bold,
-          color: AppColors.primary[900],
+          color: AppColors.black
         ),
       ),
     ],
