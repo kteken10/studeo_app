@@ -122,4 +122,9 @@ class AppColors {
     800: Color(0xFF652A22),
     900: Color(0xFF331511),
   };
+
+  // Correction de la syntaxe pour la couleur de bordure
+  static const colorBorder = {
+    900: Color(0xFFEDEFFF),
+  };
 }

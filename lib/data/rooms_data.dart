@@ -93,7 +93,7 @@ final List<Map<String, dynamic>> roomsData = [
     'type': 'Appartement T2',
     'price': '1150€',
     'features': ['40 m²', 'Balcon', 'Proche université'],
-    'availability': 'Disponible',
+    'availability': 'Disponible à partir du 30 août 2025',
     'images': [
       'assets/SergicNantere1.jpg',
       'assets/SergicNantere2.jpg',

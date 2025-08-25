@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studapart_mobile/ui/pulsing_circl.dart';
 import '../constants/colors.dart';
 
 class RoomCard extends StatelessWidget {
@@ -23,13 +24,23 @@ class RoomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Détermination de la couleur de disponibilité
+    final bool isAvailable = availability.toLowerCase().contains('disponible') && !availability.toLowerCase().contains('à partir');
+    final Color availabilityColor = isAvailable ? Colors.green : Colors.red;
+
     return GestureDetector(
       onTap: onTap,
       child: Card(
         color: Colors.white,
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.symmetric(vertical: 8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: Colors.grey.shade300, // bordure de la carte
+            width: 1,
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -51,6 +62,7 @@ class RoomCard extends StatelessWidget {
                 ),
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
@@ -81,28 +93,34 @@ class RoomCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Titre à gauche
                       Expanded(
                         child: Text(
                           title,
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      // Prix + /mois en colonne à droite
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(
-                            price,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary[900],
-                            ),
-                          ),
+                         Container(
+  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+  decoration: BoxDecoration(
+    color: AppColors.primary[900],
+    borderRadius: BorderRadius.circular(50)
+  ),
+  child: Text(
+    price,
+    style: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+      color: AppColors.white
+    ),
+  ),
+)
+,
                           Text(
                             '/ mois',
                             style: TextStyle(
@@ -122,23 +140,36 @@ class RoomCard extends StatelessWidget {
                     features.join(' - '),
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
-
-                  const SizedBox(height: 8),
-
-                  // Disponibilité
-                  Row(
-                    children: [
-                      const Icon(Icons.circle, size: 10, color: Colors.green),
-                      const SizedBox(width: 4),
-                      Text(
-                        availability,
-                        style: const TextStyle(fontSize: 12, color: Colors.green),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
+
+            // Disponibilité avec container noir
+            // Disponibilité avec effet pulsation
+Container(
+  width: double.infinity,
+  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+  decoration: BoxDecoration(
+    color: AppColors.primary[100]!.withOpacity(0.3),
+    borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
+  ),
+  child: Row(
+    children: [
+      // Pulsating circle
+      PulsatingCircle(color: availabilityColor),
+      const SizedBox(width: 6),
+      Text(
+        availability,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          color: AppColors.primary[900],
+        ),
+      ),
+    ],
+  ),
+),
+
           ],
         ),
       ),
