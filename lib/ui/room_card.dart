@@ -78,14 +78,24 @@ class RoomCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Icon(
-                    isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: isFavorite ? Colors.red : Colors.white,
-                  ),
-                ),
+               Positioned(
+  top: 8,
+  right: 8,
+  child: Container(
+    padding: const EdgeInsets.all(6), // espace autour de l'icône
+    decoration: BoxDecoration(
+      color: Colors.white, // fond blanc
+      shape: BoxShape.circle, // forme circulaire
+      
+    ),
+    child: Icon(
+      isFavorite ? Icons.favorite : Icons.favorite_border,
+      color: isFavorite ? Colors.red : Colors.grey.shade400,
+      size: 18
+    ),
+  ),
+),
+
               ],
             ),
 
