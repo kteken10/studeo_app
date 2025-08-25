@@ -27,20 +27,19 @@ final List<Map<String, dynamic>> roomsData = [
     'isFavorite': false,
     'isOnPromotion': true,
     'images': [
-      'assets/Nantere1.jpeg'
-      'assets/Nantere2.jpeg',
-      'assets/Nantere3.jpeg',
+      'assets/Nanterre1.jpeg',
+      'assets/Nanterre2.jpeg',
+      'assets/Nanterre3.jpeg',
     ],
   },
   {
     'title': 'Appartement T1 – Nanterre Centre',
     'type': 'Appartement T1',
-    'originalPrice': '750€',
-    'currentPrice': '650€',
+    'price': '750€',
     'features': ['25 m²', 'Meublé', 'Proche commerces'],
     'availability': 'Disponible',
     'isFavorite': false,
-    'isOnPromotion': true,
+    'isOnPromotion': false,
     'images': [
       'assets/Nanterre1.jpeg',
       'assets/Nanterre2.jpeg',

@@ -182,7 +182,8 @@ class NotificationCard extends StatelessWidget {
     final difference = now.difference(dt);
 
     if (difference.inDays == 1) return 'Hier à ${_formatTime(dt)}';
-    if (difference.inDays < 7) return '${_getWeekday(dt.weekday)} à ${_formatTime(dt)}';
+    if (difference.inDays < 7)
+      return '${_getWeekday(dt.weekday)} à ${_formatTime(dt)}';
     return '${dt.day}/${dt.month}/${dt.year}';
   }
 

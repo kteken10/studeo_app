@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:studapart_mobile/ui/room_card.dart';
 import 'package:studapart_mobile/ui/custom_app_bar.dart';
 import 'package:studapart_mobile/ui/search_card.dart';
+import 'package:studapart_mobile/data/rooms_data.dart';
 
-import 'package:studapart_mobile/data/rooms_data.dart'; 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
-   
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const PreferredSize(
@@ -35,10 +32,14 @@ class SearchScreen extends StatelessWidget {
                     title: room['title'],
                     type: room['type'],
                     price: room['price'],
+                    originalPrice: room['originalPrice'],
+                    currentPrice: room['currentPrice'],
                     features: List<String>.from(room['features']),
                     availability: room['availability'],
+                    isFavorite: room['isFavorite'] ?? false,
+                    isOnPromotion: room['isOnPromotion'] ?? false,
                     onTap: () {
-                      // Ici tu peux naviguer vers une page de détails
+                      // Navigation vers la page de détails
                     },
                   );
                 },

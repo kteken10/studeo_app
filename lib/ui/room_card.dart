@@ -6,9 +6,9 @@ class RoomCard extends StatelessWidget {
   final List<String> imageUrls;
   final String title;
   final String type;
-  final String? price;          // prix normal si pas de promo
-  final String? originalPrice;  // prix barré si promo
-  final String? currentPrice;   // prix actuel si promo
+  final String? price; // prix normal si pas de promo
+  final String? originalPrice; // prix barré si promo
+  final String? currentPrice; // prix actuel si promo
   final List<String> features;
   final String availability;
   final bool isFavorite;
@@ -32,9 +32,15 @@ class RoomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isAvailable = availability.toLowerCase().contains('disponible') &&
-        !availability.toLowerCase().contains('à partir');
+    final bool isAvailable =
+        availability.toLowerCase().contains('disponible') &&
+            !availability.toLowerCase().contains('à partir');
     final Color availabilityColor = isAvailable ? Colors.green : Colors.red;
+
+    // Affichage prix avec fallback automatique
+    final String displayedPrice = isOnPromotion
+        ? (currentPrice ?? price ?? "Prix indisponible")
+        : (price ?? "Prix indisponible");
 
     return GestureDetector(
       onTap: onTap,
@@ -44,31 +50,27 @@ class RoomCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: BorderSide(
-            color: Colors.grey.shade300,
-            width: 1,
-          ),
+          side: BorderSide(color: Colors.grey.shade300, width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Images avec swipe et bouton favoris
+            // Images swipe + favoris
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(12)),
                   child: SizedBox(
                     height: 180,
                     width: double.infinity,
                     child: PageView.builder(
                       itemCount: imageUrls.length,
-                      itemBuilder: (context, index) {
-                        return Image.asset(
-                          imageUrls[index],
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        );
-                      },
+                      itemBuilder: (context, index) => Image.asset(
+                        imageUrls[index],
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
                     ),
                   ),
                 ),
@@ -92,87 +94,75 @@ class RoomCard extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          type,
-                          style: const TextStyle(fontSize: 12, color: AppColors.black),
-                        ),
+                        child: Text(type,
+                            style: const TextStyle(
+                                fontSize: 12, color: AppColors.black)),
                       ),
-                      Text(
-                        'à partir de',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: AppColors.primary[900],
-                        ),
-                      ),
+                      Text('à partir de',
+                          style: TextStyle(
+                              fontSize: 12, color: AppColors.primary[900])),
                     ],
                   ),
                   const SizedBox(height: 4),
 
-                  // Titre + Prix + Promotion
+                  // Titre + Prix + Badge promo
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: Text(title,
+                            style: const TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold)),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          if (isOnPromotion)
+                          if ( isOnPromotion)
                             Container(
-                              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 2, horizontal: 8),
                               decoration: BoxDecoration(
                                 color: Colors.blue,
                                 borderRadius: BorderRadius.circular(50),
                               ),
-                              child: const Text(
-                                'Promotion en cours',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
+                              child: const Text('Promotion en cours',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          if (isOnPromotion && originalPrice != null) ...[
+                            const SizedBox(height: 4),
+                            Text(originalPrice!,
+                                style: const TextStyle(
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
+                                  color: Colors.white70,
+                                  decoration: TextDecoration.lineThrough,
+                                )),
+                          ],
                           const SizedBox(height: 4),
-                          if (isOnPromotion && originalPrice != null)
-                            Text(
-                              originalPrice!,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white70,
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                            ),
                           Container(
-                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 8),
                             decoration: BoxDecoration(
-                              color: isOnPromotion ? Colors.blue : AppColors.primary[900],
+                              color: isOnPromotion
+                                  ? Colors.blue
+                                  : AppColors.primary[900],
                               borderRadius: BorderRadius.circular(50),
                             ),
-                            child: Text(
-                              isOnPromotion && currentPrice != null ? currentPrice! : price!,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: Text(displayedPrice,
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)),
                           ),
-                          Text(
-                            '/ mois',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: isOnPromotion ? Colors.blue : AppColors.primary[900],
-                            ),
-                          ),
+                          Text('/ mois',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: isOnPromotion
+                                      ? Colors.blue
+                                      : AppColors.primary[900])),
                         ],
                       ),
                     ],
@@ -180,10 +170,9 @@ class RoomCard extends StatelessWidget {
                   const SizedBox(height: 8),
 
                   // Features
-                  Text(
-                    features.join(' - '),
-                    style: TextStyle(fontSize: 12, color: AppColors.primary[800]),
-                  ),
+                  Text(features.join(' - '),
+                      style: TextStyle(
+                          fontSize: 12, color: AppColors.primary[800])),
                 ],
               ),
             ),
@@ -194,20 +183,18 @@ class RoomCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               decoration: BoxDecoration(
                 color: AppColors.primary[100]!.withOpacity(0.3),
-                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
+                borderRadius:
+                    const BorderRadius.vertical(bottom: Radius.circular(12)),
               ),
               child: Row(
                 children: [
                   PulsatingCircle(color: availabilityColor),
                   const SizedBox(width: 6),
-                  Text(
-                    availability,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black,
-                    ),
-                  ),
+                  Text(availability,
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.black)),
                 ],
               ),
             ),
