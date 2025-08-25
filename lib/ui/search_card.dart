@@ -142,7 +142,7 @@ class _SearchCardState extends State<SearchCard> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _filterIcon(Icons.calendar_today, "Date", _pickDate),
-            _filterIcon(Icons.apartment, "Type de Logement", _pickType),
+            _filterIcon(Icons.apartment, "Type", _pickType),
             _filterIcon(Icons.euro, "Budget", _pickPrice),
             _filterIcon(Icons.meeting_room, "Nb pièce", _pickRooms),
           ],

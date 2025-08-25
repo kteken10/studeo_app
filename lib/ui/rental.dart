@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:studapart_mobile/constants/colors.dart';
+import 'package:studapart_mobile/screens/notification.dart';
+
 
 class Rental extends StatefulWidget {
   final bool isDossierComplet;
@@ -102,7 +104,7 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
     int badgeCount = 0,
     VoidCallback? onTap,
     Key? key,
-    bool shake = false, // option secouement
+    bool shake = false,
   }) {
     Widget iconWidget = Center(child: Icon(icon, size: 24, color: color));
 
@@ -152,7 +154,6 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
           ),
         ),
 
-        // 🔴 Badge
         if (badgeCount > 0)
           Positioned(
             right: 2,
@@ -198,7 +199,7 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
           },
         ),
 
-        // 🔔 Notifications (ancien cœur)
+        // 🔔 Notifications
         buildCircleIcon(
           icon: Iconsax.notification,
           color: AppColors.quadrary[900]!,
@@ -208,6 +209,12 @@ class _RentalState extends State<Rental> with SingleTickerProviderStateMixin {
               notificationCount =
                   (notificationCount > 0) ? notificationCount - 1 : 0;
             });
+
+            // Navigation vers l'écran de notifications
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const NotificationScreen()),
+            );
           },
         ),
 
