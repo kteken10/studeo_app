@@ -157,7 +157,7 @@ class _SearchCardState extends State<SearchCard> {
   // ---- Widgets UI ----
   Widget _buildSearchBar() {
     return Container(
-      height: 60,
+      height: 50,
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
@@ -208,14 +208,14 @@ class _SearchCardState extends State<SearchCard> {
           if (_isSearching) const SizedBox(width: 8),
           CircleAvatar(
             backgroundColor: AppColors.primary[900],
-            radius: _isSearching ? 8 : 16,
+            radius: _isSearching ? 8 : 14,
             child: IconButton(
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               icon: Icon(
                 _isSearching ? Icons.close : Icons.search,
                 color: _isSearching ? AppColors.warning[900] : AppColors.white,
-                size: _isSearching ? 12 : 20,
+                size: _isSearching ? 14: 20,
               ),
               onPressed: _toggleSearch,
             ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart'; // package:ionicons
+import 'package:ionicons/ionicons.dart'; 
 
 class CategoryCard extends StatelessWidget {
   final String name;
@@ -7,23 +7,23 @@ class CategoryCard extends StatelessWidget {
   final VoidCallback? onTap;
 
   const CategoryCard({
-    Key? key,
+    super.key,
     required this.name,
     this.width,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 80, // équiv. h-20
+        height: 80, 
         width: width,
-        margin: const EdgeInsets.symmetric(horizontal: 4), // mx-1
+        margin: const EdgeInsets.symmetric(horizontal: 4), 
         decoration: BoxDecoration(
-          color: Colors.grey.shade200, // bg-neutral-200
-          borderRadius: BorderRadius.circular(16), // rounded-xl
+          color: Colors.grey.shade200,
+          borderRadius: BorderRadius.circular(16), 
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -31,13 +31,13 @@ class CategoryCard extends StatelessWidget {
             const Icon(
               Ionicons.fast_food_outline,
               size: 24,
-              color: Color(0xFFFF8800), // orange
+              color: Color(0xFFFF8800), 
             ),
-            const SizedBox(height: 4), // équiv. gap-2
+            const SizedBox(height: 4), 
             Text(
               name,
               style: TextStyle(
-                color: Colors.grey.shade600, // text-neutral-600
+                color: Colors.grey.shade600, 
               ),
             ),
           ],

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:studapart_mobile/constants/colors.dart';
 import 'package:studapart_mobile/screens/notification.dart';
+import 'package:studapart_mobile/ui/circle_icon.dart';
 
 class Rental extends StatefulWidget {
   final bool isDossierComplet;
@@ -36,7 +37,6 @@ class _RentalState extends State<Rental> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    // Animation messages
     _messageController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -48,7 +48,6 @@ class _RentalState extends State<Rental> with TickerProviderStateMixin {
       TweenSequenceItem(tween: Tween(begin: 0.3, end: 0), weight: 1),
     ]).animate(CurvedAnimation(parent: _messageController, curve: Curves.easeInOut));
 
-    // Animation notifications
     _notificationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -60,30 +59,25 @@ class _RentalState extends State<Rental> with TickerProviderStateMixin {
       TweenSequenceItem(tween: Tween(begin: 0.3, end: 0), weight: 1),
     ]).animate(CurvedAnimation(parent: _notificationController, curve: Curves.easeInOut));
 
-    // Lancer les secouements aléatoires
     _scheduleNextMessageShake();
     _scheduleNextNotificationShake();
   }
 
   void _scheduleNextMessageShake() {
     if (!mounted) return;
-    final duration = Duration(seconds: 2 + _random.nextInt(3)); // 2 à 4 sec
+    final duration = Duration(seconds: 2 + _random.nextInt(3));
     _messageTimer = Timer(duration, () {
-      if (mounted && messageCount > 0) {
-        _messageController.forward(from: 0);
-      }
-      _scheduleNextMessageShake(); // replanifier
+      if (mounted && messageCount > 0) _messageController.forward(from: 0);
+      _scheduleNextMessageShake();
     });
   }
 
   void _scheduleNextNotificationShake() {
     if (!mounted) return;
-    final duration = Duration(seconds: 3 + _random.nextInt(4)); // 3 à 6 sec
+    final duration = Duration(seconds: 3 + _random.nextInt(4));
     _notificationTimer = Timer(duration, () {
-      if (mounted && notificationCount > 0) {
-        _notificationController.forward(from: 0);
-      }
-      _scheduleNextNotificationShake(); // replanifier
+      if (mounted && notificationCount > 0) _notificationController.forward(from: 0);
+      _scheduleNextNotificationShake();
     });
   }
 
@@ -109,8 +103,7 @@ class _RentalState extends State<Rental> with TickerProviderStateMixin {
   }
 
   OverlayEntry _createOverlay() {
-    RenderBox renderBox =
-        _menuKey.currentContext!.findRenderObject() as RenderBox;
+    RenderBox renderBox = _menuKey.currentContext!.findRenderObject() as RenderBox;
     var offset = renderBox.localToGlobal(Offset.zero);
 
     return OverlayEntry(
@@ -138,124 +131,111 @@ class _RentalState extends State<Rental> with TickerProviderStateMixin {
     );
   }
 
-  Widget buildCircleIcon({
-    required IconData icon,
-    required Color color,
-    int badgeCount = 0,
-    VoidCallback? onTap,
-    Key? key,
-    Animation<double>? shakeAnimation,
-  }) {
-    Widget iconWidget = Center(child: Icon(icon, size: 24, color: color));
-
-    if (shakeAnimation != null) {
-      iconWidget = AnimatedBuilder(
-        animation: shakeAnimation,
-        builder: (context, child) {
-          return Transform.rotate(
-            angle: shakeAnimation.value,
-            child: child,
-          );
-        },
-        child: iconWidget,
-      );
-    }
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          key: key,
-          width: 50,
-          height: 50,
-          margin: const EdgeInsets.only(left: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.grey.shade200),
-            boxShadow: [
-              BoxShadow(
-                // ignore: deprecated_member_use
-                color: AppColors.primary[900]!.withOpacity(0.1),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Material(
-            color: Colors.transparent,
-            shape: const CircleBorder(),
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              // ignore: deprecated_member_use
-              splashColor: AppColors.primary[900]!.withOpacity(0.2),
-              // ignore: deprecated_member_use
-              highlightColor: Colors.grey.withOpacity(0.1),
-              onTap: onTap,
-              child: iconWidget,
-            ),
-          ),
-        ),
-        if (badgeCount > 0)
-          Positioned(
-            right: 2,
-            top: 2,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-              ),
-              constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
-              child: Center(
-                child: Text(
-                  badgeCount.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        buildCircleIcon(
-          icon: Iconsax.sms,
-          color: AppColors.quadrary[900]!,
-          badgeCount: messageCount,
-          shakeAnimation: _messageShake,
-          onTap: () {
-            setState(() {
-              messageCount = 0;
-            });
-          },
+        // Message Icon avec badge
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            AnimatedBuilder(
+              animation: _messageShake,
+              builder: (context, child) {
+                return Transform.rotate(
+                  angle: _messageShake.value,
+                  child: child,
+                );
+              },
+              child: CircleIcon(
+                icon: Iconsax.sms,
+                color: AppColors.quadrary[900]!,
+                onTap: () => setState(() => messageCount = 0),
+              ),
+            ),
+            if (messageCount > 0)
+              Positioned(
+                right: 4,
+                top: -2,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                  child: Center(
+                    child: Text(
+                      messageCount.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
-        buildCircleIcon(
-          icon: Iconsax.notification,
-          color: AppColors.quadrary[900]!,
-          badgeCount: notificationCount,
-          shakeAnimation: _notificationShake,
-          onTap: () {
-            setState(() {
-              notificationCount =
-                  (notificationCount > 0) ? notificationCount - 1 : 0;
-            });
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const NotificationScreen()),
-            );
-          },
+
+        const SizedBox(width: 12),
+
+        // Notification Icon avec badge
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            AnimatedBuilder(
+              animation: _notificationShake,
+              builder: (context, child) {
+                return Transform.rotate(
+                  angle: _notificationShake.value,
+                  child: child,
+                );
+              },
+              child: CircleIcon(
+                icon: Iconsax.notification,
+                color: AppColors.quadrary[900]!,
+                onTap: () {
+                  setState(() => notificationCount = (notificationCount > 0) ? notificationCount - 1 : 0);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const NotificationScreen()),
+                  );
+                },
+              ),
+            ),
+            if (notificationCount > 0)
+              Positioned(
+                right: 4,
+                top: -2,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                  child: Center(
+                    child: Text(
+                      notificationCount.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
-        buildCircleIcon(
+
+        const SizedBox(width: 12),
+
+        // Menu Icon
+        CircleIcon(
           key: _menuKey,
           icon: Iconsax.more,
           color: AppColors.quadrary[900]!,

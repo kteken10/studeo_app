@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:studapart_mobile/ui/pulsing_circl.dart';
 import '../constants/colors.dart';
 
-class RoomCard extends StatelessWidget {
+class RoomCard extends StatefulWidget {
   final List<String> imageUrls;
   final String title;
   final String type;
@@ -31,18 +31,31 @@ class RoomCard extends StatelessWidget {
   });
 
   @override
+  State<RoomCard> createState() => _RoomCardState();
+}
+
+class _RoomCardState extends State<RoomCard> {
+  late bool _isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = widget.isFavorite;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final bool isAvailable = availability.toLowerCase().contains('disponible') &&
-        !availability.toLowerCase().contains('à partir');
+    final bool isAvailable = widget.availability.toLowerCase().contains('disponible') &&
+        !widget.availability.toLowerCase().contains('à partir');
     final Color availabilityColor = isAvailable ? Colors.green : Colors.red;
 
     // Prix affiché selon si promo ou non
-    final String displayedPrice = isOnPromotion
-        ? (currentPrice ?? "Prix indisponible")
-        : (price ?? "Prix indisponible");
+    final String displayedPrice = widget.isOnPromotion
+        ? (widget.currentPrice ?? widget.price ?? "Prix indisponible")
+        : (widget.price ?? "Prix indisponible");
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Card(
         color: Colors.white,
         elevation: 0,
@@ -67,10 +80,10 @@ class RoomCard extends StatelessWidget {
                     height: 180,
                     width: double.infinity,
                     child: PageView.builder(
-                      itemCount: imageUrls.length,
+                      itemCount: widget.imageUrls.length,
                       itemBuilder: (context, index) {
                         return Image.asset(
-                          imageUrls[index],
+                          widget.imageUrls[index],
                           fit: BoxFit.cover,
                           width: double.infinity,
                         );
@@ -78,27 +91,39 @@ class RoomCard extends StatelessWidget {
                     ),
                   ),
                 ),
-               Positioned(
-  top: 8,
-  right: 8,
-  child: Container(
-    padding: const EdgeInsets.all(6), // espace autour de l'icône
-    decoration: BoxDecoration(
-      color: Colors.white, // fond blanc
-      shape: BoxShape.circle, // forme circulaire
-      
-    ),
-    child: Icon(
-      isFavorite ? Icons.favorite : Icons.favorite_border,
-      color: isFavorite ? Colors.red : Colors.grey.shade400,
-      size: 18
-    ),
-  ),
-),
-
+                // Bouton favoris
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isFavorite = !_isFavorite;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        _isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: _isFavorite ? Colors.red : Colors.grey.shade400,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
@@ -109,7 +134,7 @@ class RoomCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          type,
+                          widget.type,
                           style: const TextStyle(
                             fontSize: 12,
                             color: AppColors.black,
@@ -126,14 +151,13 @@ class RoomCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 4),
-
                   // Titre + Prix + Promotion
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: Text(
-                          title,
+                          widget.title,
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -143,12 +167,11 @@ class RoomCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          // Badge promo
-                          if (isOnPromotion)
+                          if (widget.isOnPromotion)
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 2,
-                                horizontal: 8,
+                                horizontal: 10
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.blue,
@@ -163,12 +186,10 @@ class RoomCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-
-                          // Prix barré si promo
-                          if (isOnPromotion && originalPrice != null) ...[
+                          if (widget.isOnPromotion && widget.originalPrice != null) ...[
                             const SizedBox(height: 4),
                             Text(
-                              originalPrice!,
+                              widget.originalPrice!,
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -177,15 +198,13 @@ class RoomCard extends StatelessWidget {
                               ),
                             ),
                           ],
-
                           const SizedBox(height: 4),
-
-                          // Prix affiché
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 4, horizontal: 8),
                             decoration: BoxDecoration(
-                              color: AppColors.primary[900],
+                              color: 
+                                   AppColors.ternary[900],
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: Text(
@@ -201,7 +220,7 @@ class RoomCard extends StatelessWidget {
                             '/ mois',
                             style: TextStyle(
                               fontSize: 12,
-                              color: isOnPromotion
+                              color: widget.isOnPromotion
                                   ? Colors.blue
                                   : AppColors.primary[900],
                             ),
@@ -211,10 +230,9 @@ class RoomCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-
                   // Features
                   Text(
-                    features.join(' - '),
+                    widget.features.join(' - '),
                     style: TextStyle(
                       fontSize: 12,
                       color: AppColors.primary[800],
@@ -223,7 +241,6 @@ class RoomCard extends StatelessWidget {
                 ],
               ),
             ),
-
             // Disponibilité avec effet pulsation
             Container(
               width: double.infinity,
@@ -238,7 +255,7 @@ class RoomCard extends StatelessWidget {
                   PulsatingCircle(color: availabilityColor),
                   const SizedBox(width: 6),
                   Text(
-                    availability,
+                    widget.availability,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
