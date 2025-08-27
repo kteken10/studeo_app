@@ -70,12 +70,11 @@ class _RoomCardState extends State<RoomCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Images avec swipe et bouton favoris
+            // Images avec swipe, favoris et promotion badge
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(12)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                   child: SizedBox(
                     height: 180,
                     width: double.infinity,
@@ -91,7 +90,31 @@ class _RoomCardState extends State<RoomCard> {
                     ),
                   ),
                 ),
-                // Bouton favoris
+                // Badge promotion centré horizontalement
+                if (widget.isOnPromotion)
+                  Positioned(
+                    top: 8,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: const Text(
+                          'Promotion en cours',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                // Bouton favoris en haut à droite
                 Positioned(
                   top: 8,
                   right: 8,
@@ -151,7 +174,7 @@ class _RoomCardState extends State<RoomCard> {
                     ],
                   ),
                   const SizedBox(height: 4),
-                  // Titre + Prix + Promotion
+                  // Titre + Prix
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -167,27 +190,8 @@ class _RoomCardState extends State<RoomCard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          if (widget.isOnPromotion)
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 2,
-                                horizontal: 10
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: const Text(
-                                'Promotion en cours',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
+                          if (!widget.isOnPromotion) const SizedBox(height: 0),
                           if (widget.isOnPromotion && widget.originalPrice != null) ...[
-                            const SizedBox(height: 4),
                             Text(
                               widget.originalPrice!,
                               style: const TextStyle(
@@ -197,14 +201,12 @@ class _RoomCardState extends State<RoomCard> {
                                 decoration: TextDecoration.lineThrough,
                               ),
                             ),
+                            const SizedBox(height: 4),
                           ],
-                          const SizedBox(height: 4),
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                             decoration: BoxDecoration(
-                              color: 
-                                   AppColors.ternary[900],
+                              color: AppColors.ternary[900],
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: Text(
@@ -220,9 +222,7 @@ class _RoomCardState extends State<RoomCard> {
                             '/ mois',
                             style: TextStyle(
                               fontSize: 12,
-                              color: widget.isOnPromotion
-                                  ? Colors.blue
-                                  : AppColors.primary[900],
+                              color: widget.isOnPromotion ? Colors.blue : AppColors.primary[900],
                             ),
                           ),
                         ],
@@ -247,8 +247,7 @@ class _RoomCardState extends State<RoomCard> {
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               decoration: BoxDecoration(
                 color: AppColors.primary[100]!.withOpacity(0.3),
-                borderRadius:
-                    const BorderRadius.vertical(bottom: Radius.circular(12)),
+                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
               ),
               child: Row(
                 children: [

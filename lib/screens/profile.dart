@@ -2,8 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:studapart_mobile/constants/colors.dart';
 import 'package:studapart_mobile/ui/circle_icon.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool isDarkMode = false; // état du thème
+
+  void _toggleTheme() {
+    setState(() {
+      isDarkMode = !isDarkMode;
+    });
+    print(isDarkMode ? "Dark Mode activé" : "Light Mode activé");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +41,13 @@ class ProfileScreen extends StatelessWidget {
           CircleIcon(
             icon: Icons.share,
             color: AppColors.quadrary[900]!,
-            // ignore: avoid_print
             onTap: () => print("Partager le profil"),
+            size: 40,
+          ),
+          CircleIcon(
+            icon: isDarkMode ? Icons.nightlight_round : Icons.wb_sunny, // 🌙 / 🌞
+            color: AppColors.quadrary[900]!,
+            onTap: _toggleTheme,
             size: 40,
           ),
         ],
@@ -39,8 +58,6 @@ class ProfileScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
             ProfileHeader(),
-            SizedBox(height: 20),
-            PersonalInfoSection(),
             SizedBox(height: 20),
             RentalInfoSection(),
             SizedBox(height: 20),
@@ -54,7 +71,6 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-/// Header avec photo et nom
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
 
@@ -62,101 +78,140 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const CircleAvatar(
-          radius: 40,
-          backgroundImage: AssetImage('assets/user.png'),
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.ternary[900]!, width: 2),
+            image: const DecorationImage(
+              image: AssetImage('assets/user.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
         const SizedBox(width: 16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Kevin Dissang",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-
-            // Ligne Email + Icône de modification à droite
-            Row(
-              children: [
-                const Text(
-                  "dissangkevin@yahoo.com",
-                  style: TextStyle(color: Colors.grey),
-                ),
-                const SizedBox(width: 6),
-                GestureDetector(
-                  onTap: () {
-                    // Ici tu pourras ouvrir un modal ou une page pour modifier l’email
-                    print("Modifier l'email");
-                  },
-                  child: const Icon(Icons.edit, size: 16, color: Colors.grey),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 4),
-            const Text(
-              "+237 6 97 64 54 15",
-              style: TextStyle(color: Colors.grey),
-            ),
-          ],
-        )
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      "Kevin Dissang",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => print("Modifier le profil"),
+                    child: const Icon(Icons.edit, size: 20, color: Colors.grey),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                "dissangkevin@yahoo.com",
+                style: TextStyle(color: Colors.grey),
+              ),
+              const SizedBox(height: 2),
+              const Text(
+                "+237 6 97 64 54 15",
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
 }
 
-/// Informations personnelles
-class PersonalInfoSection extends StatelessWidget {
-  const PersonalInfoSection({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SectionContainer(
-      title: "Informations personnelles",
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          InfoRow(label: "Date de naissance", value: "01/01/1995"),
-          InfoRow(label: "Statut", value: "Locataire actif"),
-        ],
-      ),
-    );
-  }
-}
-
-/// Infos location
 class RentalInfoSection extends StatelessWidget {
   const RentalInfoSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SectionContainer(
-      title: "Infos location",
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          InfoRow(label: "Logement actuel", value: "Appartement 3 pièces"),
-          InfoRow(label: "Loyer mensuel", value: "350€"),
-          InfoRow(label: "Historique locations", value: "2 appartements"),
-          InfoRow(label: "Favoris", value: "5 logements"),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InfoColumn(
+            icon: Icons.attach_money,
+            iconColor: AppColors.ternary[900]!,
+            value: "350€",
+            label: "Loyer mensuel",
+          ),
+          InfoColumn(
+            icon: Icons.favorite,
+            iconColor: AppColors.ternary[900]!,
+            value: "5",
+            label: "Favoris",
+          ),
+          InfoColumn(
+            icon: Icons.history,
+            iconColor: AppColors.ternary[900]!,
+            value: "2",
+            label: "Historique locations",
+          ),
         ],
       ),
     );
   }
 }
 
-/// Documents et Paiements
+class InfoColumn extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String value;
+  final String label;
+
+  const InfoColumn({
+    super.key,
+    required this.icon,
+    required this.iconColor,
+    required this.value,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: iconColor.withOpacity(0.1),
+          ),
+          child: Icon(icon, size: 26, color: iconColor),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        if (label.isNotEmpty) const SizedBox(height: 4),
+        if (label.isNotEmpty)
+          Text(
+            label,
+            style: const TextStyle(color: Colors.grey, fontSize: 12),
+          ),
+      ],
+    );
+  }
+}
+
 class DocumentsSection extends StatelessWidget {
   const DocumentsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SectionContainer(
-      title: "Documents & Paiements",
+    return const SectionContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           InfoRow(label: "Contrat de location", value: "Télécharger"),
           InfoRow(label: "Factures", value: "Voir l'historique"),
         ],
@@ -165,25 +220,40 @@ class DocumentsSection extends StatelessWidget {
   }
 }
 
-/// Paramètres et actions
 class SettingsSection extends StatelessWidget {
   const SettingsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SectionContainer(
-      title: "Paramètres & Actions",
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const InfoRow(label: "Changer mot de passe", value: ""),
-          const InfoRow(label: "Notifications", value: "Email & Push"),
+          const InfoRow(
+            icon: Icons.lock,
+            label: "Changer mot de passe",
+            value: "",
+          ),
+          const InfoRow(
+            icon: Icons.notifications,
+            label: "Notifications",
+            value: "Email & Push",
+          ),
+        
           GestureDetector(
-            // ignore: avoid_print
             onTap: () => print("Déconnexion"),
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Text("Se déconnecter", style: TextStyle(color: Colors.red)),
+              child: Row(
+                children: [
+                  Icon(Icons.logout, color: Colors.red),
+                  SizedBox(width: 8),
+                  Text(
+                    "Se déconnecter",
+                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -192,12 +262,10 @@ class SettingsSection extends StatelessWidget {
   }
 }
 
-/// Widget réutilisable pour les sections
 class SectionContainer extends StatelessWidget {
-  final String title;
   final Widget child;
 
-  const SectionContainer({super.key, required this.title, required this.child});
+  const SectionContainer({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -206,43 +274,41 @@ class SectionContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade200,
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: Colors.grey.shade200, width: 1),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title,
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          const SizedBox(height: 12),
-          child,
-        ],
-      ),
+      child: child,
     );
   }
 }
 
-/// Widget réutilisable pour afficher une ligne d'information
 class InfoRow extends StatelessWidget {
+  final IconData? icon;
   final String label;
   final String value;
 
-  const InfoRow({super.key, required this.label, required this.value});
+  const InfoRow({
+    super.key,
+    this.icon,
+    required this.label,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: AppColors.primary[300])),
+          Row(
+            children: [
+              if (icon != null) ...[
+                Icon(icon, size: 20, color: Colors.grey.shade300),
+                const SizedBox(width: 8),
+              ],
+              Text(label, style: TextStyle(color: Colors.grey.shade600)),
+            ],
+          ),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
         ],
       ),
