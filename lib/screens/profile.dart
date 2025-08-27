@@ -52,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             size: 40,
           ),
           CircleIcon(
-            icon: isDarkMode ? Icons.nightlight_round : Icons.wb_sunny, // 🌙 / 🌞
+            icon: isDarkMode ? Icons.nightlight_round : Icons.wb_sunny,
             color: AppColors.quadrary[900]!,
             onTap: _toggleTheme,
             size: 40,
@@ -66,9 +66,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             const ProfileHeader(),
             const SizedBox(height: 20),
+          
             const RentalInfoSection(),
+            
+                const SizedBox(height: 20),
+             
+             const PersonalInfoSection(), 
             const SizedBox(height: 20),
             const DocumentsSection(),
+           
+           
             const SizedBox(height: 20),
             SettingsSection(
               isPasswordVisible: isPasswordVisible,
@@ -80,61 +87,69 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: AppColors.ternary[900]!, width: 2),
-            image: const DecorationImage(
-              image: AssetImage('assets/user.png'),
-              fit: BoxFit.cover,
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.ternary[900]!.withOpacity(0.8), // Fond noir
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2), // bordure blanche
+              image: const DecorationImage(
+                image: AssetImage('assets/user.png'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      "Kevin Dissang",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Expanded(
+                      child: Text(
+                        "Kevin Dissang",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white, // texte blanc
+                        ),
+                      ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () => print("Modifier le profil"),
-                    child: const Icon(Icons.edit,
-                        size: 20, color: Colors.grey),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              const Text(
-                "dissangkevin@yahoo.com",
-                style: TextStyle(color: Colors.grey),
-              ),
-              const SizedBox(height: 2),
-              const Text(
-                "+237 6 97 64 54 15",
-                style: TextStyle(color: Colors.grey),
-              ),
-            ],
+                    GestureDetector(
+                      onTap: () => print("Modifier le profil"),
+                      child: const Icon(Icons.edit, size: 20, color: Colors.white),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  "dissangkevin@yahoo.com",
+                  style: TextStyle(color: Colors.white70),
+                ),
+                const SizedBox(height: 2),
+                const Text(
+                  "+237 6 97 64 54 15",
+                  style: TextStyle(color: Colors.white70),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -224,8 +239,42 @@ class DocumentsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InfoRow(label: "Contrat de location", value: "Télécharger"),
-          InfoRow(label: "Factures", value: "Voir l'historique"),
+          InfoRow(
+            icon: Icons.description,
+            label: "Contrat de location",
+            value: "Télécharger",
+          ),
+          InfoRow(
+            icon: Icons.receipt_long,
+            label: "Factures",
+            value: "Voir l'historique",
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Nouvelle section pour date de naissance et adresse
+class PersonalInfoSection extends StatelessWidget {
+  const PersonalInfoSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SectionContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InfoRow(
+            icon: Icons.cake,
+            label: "Date de naissance",
+            value: "12/08/1990",
+          ),
+          InfoRow(
+            icon: Icons.location_on,
+            label: "Adresse",
+            value: "Douala, Cameroun",
+          ),
         ],
       ),
     );
@@ -257,9 +306,8 @@ class SettingsSection extends StatelessWidget {
                 Row(
                   children: [
                     Icon(Icons.lock, size: 20, color: AppColors.primary[900]!),
-                    SizedBox(width: 8),
-                    Text("Mot de passe",
-                        style: TextStyle(color: Colors.grey)),
+                    const SizedBox(width: 8),
+                    const Text("Mot de passe", style: TextStyle(color: Colors.grey)),
                   ],
                 ),
                 Row(
@@ -267,15 +315,15 @@ class SettingsSection extends StatelessWidget {
                     Text(
                       isPasswordVisible ? "monPassword123" : "********",
                       style: const TextStyle(
-                          fontWeight: FontWeight.w500, letterSpacing: 2),
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 2,
+                      ),
                     ),
                     const SizedBox(width: 8),
                     GestureDetector(
                       onTap: onTogglePassword,
                       child: Icon(
-                        isPasswordVisible
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                        isPasswordVisible ? Icons.visibility_off : Icons.visibility,
                         color: AppColors.primary[900]!,
                         size: 20,
                       ),
@@ -294,16 +342,15 @@ class SettingsSection extends StatelessWidget {
 
           GestureDetector(
             onTap: () => print("Déconnexion"),
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
               child: Row(
                 children: [
-                  Icon(Icons.logout, color: Colors.red),
+                  Icon(Icons.logout, color: AppColors.warning[900]),
                   SizedBox(width: 8),
                   Text(
                     "Se déconnecter",
-                    style: TextStyle(
-                        color: Colors.red, fontWeight: FontWeight.w500),
+                    style: TextStyle(color: AppColors.warning[900], fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -359,7 +406,7 @@ class InfoRow extends StatelessWidget {
                 Icon(icon, size: 20, color: AppColors.primary[900]!),
                 const SizedBox(width: 8),
               ],
-              Text(label, style: TextStyle(color: Colors.grey)),
+              Text(label, style: const TextStyle(color: Colors.grey)),
             ],
           ),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
