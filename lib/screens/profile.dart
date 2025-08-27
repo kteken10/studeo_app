@@ -11,12 +11,19 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool isDarkMode = false; // état du thème
+  bool isPasswordVisible = false; // état visibilité mot de passe
 
   void _toggleTheme() {
     setState(() {
       isDarkMode = !isDarkMode;
     });
     print(isDarkMode ? "Dark Mode activé" : "Light Mode activé");
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      isPasswordVisible = !isPasswordVisible;
+    });
   }
 
   @override
@@ -56,14 +63,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            ProfileHeader(),
-            SizedBox(height: 20),
-            RentalInfoSection(),
-            SizedBox(height: 20),
-            DocumentsSection(),
-            SizedBox(height: 20),
-            SettingsSection(),
+          children: [
+            const ProfileHeader(),
+            const SizedBox(height: 20),
+            const RentalInfoSection(),
+            const SizedBox(height: 20),
+            const DocumentsSection(),
+            const SizedBox(height: 20),
+            SettingsSection(
+              isPasswordVisible: isPasswordVisible,
+              onTogglePassword: _togglePasswordVisibility,
+            ),
           ],
         ),
       ),
@@ -100,12 +110,14 @@ class ProfileHeader extends StatelessWidget {
                   const Expanded(
                     child: Text(
                       "Kevin Dissang",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   GestureDetector(
                     onTap: () => print("Modifier le profil"),
-                    child: const Icon(Icons.edit, size: 20, color: Colors.grey),
+                    child: const Icon(Icons.edit,
+                        size: 20, color: Colors.grey),
                   ),
                 ],
               ),
@@ -221,7 +233,14 @@ class DocumentsSection extends StatelessWidget {
 }
 
 class SettingsSection extends StatelessWidget {
-  const SettingsSection({super.key});
+  final bool isPasswordVisible;
+  final VoidCallback onTogglePassword;
+
+  const SettingsSection({
+    super.key,
+    required this.isPasswordVisible,
+    required this.onTogglePassword,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -229,17 +248,50 @@ class SettingsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const InfoRow(
-            icon: Icons.lock,
-            label: "Changer mot de passe",
-            value: "",
+          // Mot de passe avec icône œil
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.lock, size: 20, color: AppColors.primary[900]!),
+                    SizedBox(width: 8),
+                    Text("Mot de passe",
+                        style: TextStyle(color: Colors.grey)),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      isPasswordVisible ? "monPassword123" : "********",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500, letterSpacing: 2),
+                    ),
+                    const SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: onTogglePassword,
+                      child: Icon(
+                        isPasswordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: AppColors.primary[900]!,
+                        size: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
+
           const InfoRow(
             icon: Icons.notifications,
             label: "Notifications",
             value: "Email & Push",
           ),
-        
+
           GestureDetector(
             onTap: () => print("Déconnexion"),
             child: const Padding(
@@ -250,7 +302,8 @@ class SettingsSection extends StatelessWidget {
                   SizedBox(width: 8),
                   Text(
                     "Se déconnecter",
-                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -303,10 +356,10 @@ class InfoRow extends StatelessWidget {
           Row(
             children: [
               if (icon != null) ...[
-                Icon(icon, size: 20, color: Colors.grey.shade300),
+                Icon(icon, size: 20, color: AppColors.primary[900]!),
                 const SizedBox(width: 8),
               ],
-              Text(label, style: TextStyle(color: Colors.grey.shade600)),
+              Text(label, style: TextStyle(color: Colors.grey)),
             ],
           ),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
