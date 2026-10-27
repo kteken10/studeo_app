@@ -40,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           size: 22,
         ),
         title: const Text(
-          "Profile",
+          "Mon profil",
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -121,7 +121,7 @@ class ProfileHeader extends StatelessWidget {
                   children: [
                     const Expanded(
                       child: Text(
-                        "Kevin Dissang",
+                        "Léa Martin",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -137,12 +137,12 @@ class ProfileHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 const Text(
-                  "dissangkevin@yahoo.com",
+                  "lea.martin@etudiant.fr",
                   style: TextStyle(color: Colors.white70),
                 ),
                 const SizedBox(height: 2),
                 const Text(
-                  "+237 6 97 64 54 15",
+                  "+33 6 00 00 00 00",
                   style: TextStyle(color: Colors.white70),
                 ),
               ],
@@ -172,7 +172,7 @@ class RentalInfoSection extends StatelessWidget {
           InfoColumn(
             icon: Icons.favorite,
             iconColor: AppColors.ternary[900]!,
-            value: "5",
+            value: "2",
             label: "Favoris",
           ),
           InfoColumn(
@@ -268,12 +268,12 @@ class PersonalInfoSection extends StatelessWidget {
           InfoRow(
             icon: Icons.cake,
             label: "Date de naissance",
-            value: "12/08/1990",
+            value: "14/03/2004",
           ),
           InfoRow(
             icon: Icons.location_on,
             label: "Adresse",
-            value: "Douala, Cameroun",
+            value: "Paris 10e, France",
           ),
         ],
       ),

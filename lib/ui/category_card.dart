@@ -29,7 +29,7 @@ class CategoryCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(
-              Ionicons.fast_food_outline,
+              Ionicons.fastFoodOutline,
               size: 24,
               color: Color(0xFFFF8800), 
             ),
