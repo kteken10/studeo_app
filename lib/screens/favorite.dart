@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/constants/colors.dart';
-import 'package:studapart_mobile/data/rooms_data.dart';
-import 'package:studapart_mobile/ui/custom_app_bar.dart';
-import 'package:studapart_mobile/ui/room_card.dart';
+import 'package:studeo/constants/colors.dart';
+import 'package:studeo/data/rooms_data.dart';
+import 'package:studeo/ui/custom_app_bar.dart';
+import 'package:studeo/ui/room_card.dart';
 
 /// Logements sauvegardés : ceux marqués `isFavorite` dans les données.
 class FavoritesScreen extends StatelessWidget {

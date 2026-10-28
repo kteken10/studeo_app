@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/ui/rental.dart';
+import 'package:studeo/ui/rental.dart';
+import 'package:studeo/ui/studeo_logo.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isDossierComplet;
@@ -18,12 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset(
-              "assets/studapart_long_logo.png",
-              width: MediaQuery.of(context).size.width * 0.33,
-              height: 36,
-              fit: BoxFit.contain,
-            ),
+            const StudeoLogo(),
             Rental(isDossierComplet: isDossierComplet),
           ],
         ),

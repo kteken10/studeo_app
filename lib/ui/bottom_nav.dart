@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:studapart_mobile/constants/colors.dart';
-import 'package:studapart_mobile/screens/favorite.dart';
-import 'package:studapart_mobile/screens/home.dart';
-import 'package:studapart_mobile/screens/profile.dart';
-import 'package:studapart_mobile/screens/search.dart';
+import 'package:studeo/constants/colors.dart';
+import 'package:studeo/screens/favorite.dart';
+import 'package:studeo/screens/home.dart';
+import 'package:studeo/screens/profile.dart';
+import 'package:studeo/screens/search.dart';
 
 class CustomBottomNav extends StatefulWidget {
   const CustomBottomNav({super.key});

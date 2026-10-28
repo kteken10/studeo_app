@@ -18,7 +18,7 @@ final List<Map<String, dynamic>> roomsData = [
     ],
   },
   {
-    'title': 'Appartement T2 – Sergic Nanterre',
+    'title': 'Appartement T2 – Nanterre Préfecture',
     'type': 'Appartement T2',
     'originalPrice': '1250€',
     'currentPrice': '1150€',
@@ -74,7 +74,7 @@ final List<Map<String, dynamic>> roomsData = [
     ],
   },
   {
-    'title': 'Appartement T2 – Ecla Courbevoie',
+    'title': 'Appartement T2 – Courbevoie La Défense',
     'type': 'Appartement T2',
     'originalPrice': '1350€',
     'currentPrice': '1250€',
@@ -92,7 +92,7 @@ final List<Map<String, dynamic>> roomsData = [
     ],
   },
   {
-    'title': 'Appartement T3 – Résidence Ecla Nanterre',
+    'title': 'Appartement T3 – Nanterre Parc',
     'type': 'Appartement T3',
     'price': '1650€',
     'features': ['50 m²', '2 salles de bain', 'Garage'],
@@ -121,7 +121,7 @@ final List<Map<String, dynamic>> roomsData = [
     ],
   },
   {
-    'title': 'Chambre étudiante – Résidence Montere',
+    'title': 'Chambre étudiante – Montreuil Croix-de-Chavaux',
     'type': 'Chambre en résidence',
     'price': '540€',
     'features': ['15 m²', 'Cuisine partagée', 'Accès sécurisé'],

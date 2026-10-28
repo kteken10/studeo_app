@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/data/notification.dart';
-import 'package:studapart_mobile/ui/notification_card.dart';
+import 'package:studeo/data/notification.dart';
+import 'package:studeo/ui/notification_card.dart';
 import '../constants/colors.dart';
 
 class NotificationScreen extends StatefulWidget {

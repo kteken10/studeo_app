@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/ui/bottom_nav.dart';
+import 'package:studeo/ui/bottom_nav.dart';
 
 void main() {
   runApp(const MyApp());

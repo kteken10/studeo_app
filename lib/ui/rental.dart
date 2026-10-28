@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:studapart_mobile/constants/colors.dart';
-import 'package:studapart_mobile/screens/notification.dart';
-import 'package:studapart_mobile/ui/circle_icon.dart';
+import 'package:studeo/constants/colors.dart';
+import 'package:studeo/screens/notification.dart';
+import 'package:studeo/ui/circle_icon.dart';
 
 class Rental extends StatefulWidget {
   final bool isDossierComplet;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/constants/colors.dart';
-import 'package:studapart_mobile/ui/button.dart'; // <-- Ajoute cet import
+import 'package:studeo/constants/colors.dart';
+import 'package:studeo/ui/button.dart'; // <-- Ajoute cet import
 
 class BudgetModal extends StatefulWidget {
   final RangeValues initialRange;

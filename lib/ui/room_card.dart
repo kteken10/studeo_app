@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/ui/pulsing_circl.dart';
+import 'package:studeo/ui/pulsing_circl.dart';
 import '../constants/colors.dart';
 
 class RoomCard extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/ui/button.dart';
+import 'package:studeo/ui/button.dart';
 
 class RoomsModal extends StatefulWidget {
   final int initialRooms;

@@ -1,6 +1,6 @@
-# Studapart Mobile
+# Studéo
 
-<p align="center"><img src="docs/banner.png" alt="Studapart Mobile: student housing app built with Flutter" width="100%"></p>
+<p align="center"><img src="docs/banner.png" alt="Studéo: student housing app built with Flutter" width="100%"></p>
 
 ![Flutter](https://img.shields.io/badge/Flutter-02569B?logo=flutter&logoColor=white)
 ![Dart](https://img.shields.io/badge/Dart-0175C2?logo=dart&logoColor=white)
@@ -18,7 +18,7 @@ A Flutter app to find student housing: browse cities, filter rooms, save favorit
 
 ## Features
 
-- **Home**: housing by city (Paris, Bordeaux, Lille, Lyon…) and partner offers.
+- **Home**: housing by city (Paris, Bordeaux, Lille, Lyon…) and a featured offer with insurance and guarantor included.
 - **Search**: room listings with filters by type, budget and number of rooms, promotions and availability.
 - **Favorites**: rooms saved for later.
 - **Notifications**: messages and alerts with unread counters.

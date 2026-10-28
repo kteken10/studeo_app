@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/constants/colors.dart';
-import 'package:studapart_mobile/data/citie.dart';
+import 'package:studeo/constants/colors.dart';
+import 'package:studeo/data/citie.dart';
 
 // Modals
-import 'package:studapart_mobile/ui/type_logement_modal.dart';
-import 'package:studapart_mobile/ui/budget_modal.dart';
-import 'package:studapart_mobile/ui/rooms_modal.dart';
-import 'package:studapart_mobile/ui/date_modal.dart';
+import 'package:studeo/ui/type_logement_modal.dart';
+import 'package:studeo/ui/budget_modal.dart';
+import 'package:studeo/ui/rooms_modal.dart';
+import 'package:studeo/ui/date_modal.dart';
 
 class SearchCard extends StatefulWidget {
   final TextEditingController? controller;

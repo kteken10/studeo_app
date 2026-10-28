@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart'; 
-import 'package:studapart_mobile/ui/button.dart';
+import 'package:studeo/ui/button.dart';
 
 class DailyPromoCard extends StatelessWidget {
   const DailyPromoCard({super.key});
@@ -71,7 +71,7 @@ class DailyPromoCard extends StatelessWidget {
                         Row(
                           children: [
                             const Text(
-                              "Partenaires:",
+                              "Inclus :",
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -82,23 +82,21 @@ class DailyPromoCard extends StatelessWidget {
 
                             // Partenaire 1
                             Container(
-                              padding: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(6),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
-                                  )
-                                ],
                               ),
-                              child: Image.asset(
-                                "assets/alianz_logo.png",
-                                width: 48,
-                                height: 24,
-                                fit: BoxFit.contain,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.shield_outlined, size: 14, color: Colors.black87),
+                                  const SizedBox(width: 4),
+                                  const Text(
+                                    "Assurance",
+                                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.black87),
+                                  ),
+                                ],
                               ),
                             ),
 
@@ -112,23 +110,21 @@ class DailyPromoCard extends StatelessWidget {
 
                             // Partenaire 2
                             Container(
-                              padding: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(6),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
-                                  )
-                                ],
                               ),
-                              child: Image.asset(
-                                "assets/mila_assurance_logo.png",
-                                width: 48,
-                                height: 24,
-                                fit: BoxFit.contain,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.verified_user_outlined, size: 14, color: Colors.black87),
+                                  const SizedBox(width: 4),
+                                  const Text(
+                                    "Garant",
+                                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.black87),
+                                  ),
+                                ],
                               ),
                             ),
                           ],

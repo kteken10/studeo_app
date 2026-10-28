@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/ui/room_card.dart';
-import 'package:studapart_mobile/ui/custom_app_bar.dart';
-import 'package:studapart_mobile/ui/search_card.dart';
-import 'package:studapart_mobile/data/rooms_data.dart';
+import 'package:studeo/ui/room_card.dart';
+import 'package:studeo/ui/custom_app_bar.dart';
+import 'package:studeo/ui/search_card.dart';
+import 'package:studeo/data/rooms_data.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});

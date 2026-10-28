@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/constants/colors.dart';
-import 'package:studapart_mobile/ui/circle_icon.dart';
+import 'package:studeo/constants/colors.dart';
+import 'package:studeo/ui/circle_icon.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

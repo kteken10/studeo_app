@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:studapart_mobile/constants/colors.dart';
-import 'package:studapart_mobile/data/locations.dart';
-import 'package:studapart_mobile/ui/city_card.dart';
-import 'package:studapart_mobile/ui/custom_app_bar.dart';
-import 'package:studapart_mobile/ui/daily_promo_card.dart';
-import 'package:studapart_mobile/ui/location_selector.dart';
+import 'package:studeo/constants/colors.dart';
+import 'package:studeo/data/locations.dart';
+import 'package:studeo/ui/city_card.dart';
+import 'package:studeo/ui/custom_app_bar.dart';
+import 'package:studeo/ui/daily_promo_card.dart';
+import 'package:studeo/ui/location_selector.dart';
 
 
 
